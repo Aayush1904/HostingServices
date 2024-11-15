@@ -9,10 +9,9 @@ export default [
     languageOptions: {
       globals: globals.browser,
     },
-    parser: "@typescript-eslint/parser",
     rules: {
-      "no-unused-expressions": "off",
-      "@typescript-eslint/no-unused-expressions": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-empty-object-type":"off"
     },
     ...pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
