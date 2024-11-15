@@ -11,7 +11,7 @@ import {
     CardContent,
     CardDescription,
 } from "@/components/ui/card";
-import { Bar, BarChart, CartesianGrid, XAxis, Cell } from "recharts";
+import { Bar, BarChart, XAxis } from "recharts";
 import {
     ChartContainer,
     ChartTooltip,
@@ -23,8 +23,6 @@ import {
     Shield,
     Zap,
     Activity,
-    DollarSign,
-    Users,
     Clock,
     Loader2,
     Layout,
@@ -34,28 +32,21 @@ import {
     Network,
     Search,
 } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
-import Navbar from "@/components/Navbar";
 import DeploymentVisual from "@/components/DeploymentVisual";
 import { Label } from "@/components/ui/label";
 import {
     getUserIdByEmail,
     createWebpageWithName,
     updateWebpageContent,
-    // initializeClients,
+    initializeClients,
     getUserWebpages,
     getWebpageContent,
 } from "@/utils/db/actions";
 import { usePrivy } from "@privy-io/react-auth";
-import CICDManager from "@/components/CICDManager";
-import { email } from "@web3-storage/w3up-client/types";
-import { useRouter } from "next/navigation";
 import { AIWebsiteGenerator } from "@/components/AIWebsiteGenerator";
-// import { DecentralizedCDN } from "@/components/DecentralisedCDN";
 import { Sidebar } from "@/components/ui/sidebar";
 import { SearchEngine } from "@/components/SearchEngine";
 import { ExampleWebsites } from "@/components/ExampleWebsites";
-import SmartContractDeployer from "@/components/SmartContractDeployer";
 // Add this type definition
 type Webpage = {
     webpages: {
@@ -86,58 +77,8 @@ const chartConfig = {
 };
 
 export default function Dashboard() {
-    const [sites, setSites] = useState([
-        {
-            id: 1,
-            name: "My First Site",
-            url: "https://http3.io/abc123",
-            chain: "Ethereum",
-            status: "Active",
-            traffic: 1500,
-            uptime: 99.9,
-            lastDeployed: "2023-03-15 14:30",
-        },
-        {
-            id: 2,
-            name: "Blog",
-            url: "https://http3.io/def456",
-            chain: "Polygon",
-            status: "Active",
-            traffic: 3000,
-            uptime: 100,
-            lastDeployed: "2023-03-14 09:15",
-        },
-        {
-            id: 3,
-            name: "DApp Frontend",
-            url: "https://http3.io/ghi789",
-            chain: "Solana",
-            status: "Maintenance",
-            traffic: 500,
-            uptime: 98.5,
-            lastDeployed: "2023-03-13 18:45",
-        },
-    ]);
-
-    const handleRename = (id: number, newName: string) => {
-        setSites(
-            sites.map((site) => (site.id === id ? { ...site, name: newName } : site))
-        );
-    };
-
-    const dummyTokenEconomy = {
-        balance: 1000,
-        staked: 500,
-        rewards: 50,
-        transactions: [
-            { id: 1, type: "Stake", amount: 100, date: "2023-03-15 08:30" },
-            { id: 2, type: "Reward", amount: 10, date: "2023-03-14 00:00" },
-            { id: 3, type: "Unstake", amount: -50, date: "2023-03-13 14:45" },
-        ],
-    };
 
     const [code, setCode] = useState(``);
-    const [githubUrl, setGithubUrl] = useState("");
     const [deployedUrl, setDeployedUrl] = useState("");
     const [isDeploying, setIsDeploying] = useState(false);
     const [livePreview, setLivePreview] = useState(code);
@@ -151,7 +92,6 @@ export default function Dashboard() {
     const [w3name, setW3name] = useState<string | null>(null);
     const [userWebpages, setUserWebpages] = useState<Webpage[]>([]);
     const [selectedWebpage, setSelectedWebpage] = useState<Webpage | null>(null);
-    const router = useRouter();
 
     const [visitorData, setVisitorData] = useLocalStorage("visitorData", {
         desktop: 0,
@@ -238,7 +178,7 @@ export default function Dashboard() {
                 try {
                     console.log(user);
 
-                    // await initializeClients(user.email.address);
+                    await initializeClients(user.email.address);
                     setIsInitialized(true);
                 } catch (error) {
                     console.error("Failed to initialize clients:", error);
@@ -402,9 +342,9 @@ export default function Dashboard() {
 
             setDeployedUrl(finalDeployedUrl);
             setW3name(name);
-            console.log(
-                `Deployed AI-generated website successfully. Transaction hash: ${txHash}, CID: ${cid}, URL: ${finalDeployedUrl}, W3name: ${name}`
-            );
+            // console.log(
+            //     `Deployed AI-generated website successfully. Transaction hash: ${txHash}, CID: ${cid}, URL: ${finalDeployedUrl}, W3name: ${name}`
+            // );
 
             // Refresh the user's webpages
             const updatedWebpages = await getUserWebpages(userId);
@@ -427,11 +367,11 @@ export default function Dashboard() {
         { name: "Manage Websites", icon: GitBranch },
         { name: "Tokens", icon: Zap },
         { name: "AI Website", icon: Cpu },
-        // { name: "Decentralized CDN", icon: Network },
+        { name: "Decentralized CDN", icon: Network },
         { name: "Search Engine", icon: Search },
         { name: "Example Websites", icon: Globe },
         { name: "Smart Contracts", icon: Shield },
-    ] as any;
+    ];
 
     return (
         <div className="min-h-screen bg-black text-gray-300">
@@ -706,7 +646,7 @@ export default function Dashboard() {
                                             ) : selectedWebpage ? (
                                                 "Update Website"
                                             ) : (
-                                                "Deploy to Host"
+                                                "Deploy to HTTP3"
                                             )}
                                         </Button>
                                         {deploymentError && (
@@ -889,7 +829,6 @@ export default function Dashboard() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                {/* <DecentralizedCDN /> */}
                             </CardContent>
                         </Card>
                     )}

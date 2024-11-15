@@ -15,31 +15,31 @@ import * as Name from "w3name";
 let web3StorageClient: any;
 let contract: ethers.Contract;
 
-// export async function initializeClients(userEmail: string) {
-//   web3StorageClient = await create();
+export async function initializeClients(userEmail: string) {
+  web3StorageClient = await create();
 
-//   // Authenticate and select a space using the user's email
-//   await web3StorageClient.login(userEmail);
-//   const spaces = await web3StorageClient.spaces();
-//   if (spaces.length > 0) {
-//     await web3StorageClient.setCurrentSpace(spaces[0].did());
-//   } else {
-//     throw new Error("No spaces available. Please create a space first.");
-//   }
-
-//   const provider = new ethers.providers.JsonRpcProvider(
-//     "https://pre-rpc.bt.io/"
-//   );
-//   const signer = new ethers.Wallet(
-//     "2f34d72c40a47e574ed54bbd14723d7753e8cf53434a180f67ef2f73187ef811",
-//     provider
-//   );
-//   contract = new ethers.Contract(
-//     "0x4eEAEB9C96951Fc1BE43f34c42A002B58FB774Ff",
-//     WebpageStorageABI.abi,
-//     signer
-//   );
-// }
+  // Authenticate and select a space using the user's email
+  await web3StorageClient.login(userEmail);
+  const spaces = await web3StorageClient.spaces();
+  if (spaces.length > 0) {
+    await web3StorageClient.setCurrentSpace(spaces[0].did());
+  } else {
+    throw new Error("No spaces available. Please create a space first.");
+  }
+//@ts-ignore
+  const provider = new ethers.providers.JsonRpcProvider(
+    "https://pre-rpc.bt.io/"
+  );
+  const signer = new ethers.Wallet(
+    "2f34d72c40a47e574ed54bbd14723d7753e8cf53434a180f67ef2f73187ef811",
+    provider
+  );
+  contract = new ethers.Contract(
+    "0x4eEAEB9C96951Fc1BE43f34c42A002B58FB774Ff",
+    WebpageStorageABI.abi,
+    signer
+  );
+}
 
 // Remove or comment out this line
 // initializeClients().catch(console.error);
